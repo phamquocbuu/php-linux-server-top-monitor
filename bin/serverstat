@@ -1,0 +1,38 @@
+#!/usr/bin/php
+<?php
+use wapmorgan\ServerStat\ConfigurationReader;
+use wapmorgan\ServerStat\Storage;
+use wapmorgan\ServerStat\WebServer;
+
+require dirname(dirname(__FILE__)).'/vendor/autoload.php';
+$config_reader = new ConfigurationReader();
+$configuration = $config_reader->config;
+$_ENV['typeperfCounter'] = $configuration['typeperf'];
+switch ($configuration['storage']) {
+    default:
+    case 'file':
+        $storage = new Storage('file');
+    break;
+}
+
+if (in_array('--port', $argv)) {
+    $port = $argv[array_search('--port', $argv)+1];
+} else {
+    $port = 81;
+}
+
+$server = new WebServer();
+$server->bind('127.0.0.1', $port);
+$server->listen(512);
+while ($socket = $server->await()) {
+    socket_read($socket, 8192, PHP_BINARY_READ);
+    $information = $storage->retrieve();
+    $buffer = json_encode($information);
+    socket_write($socket, "HTTP/1.0 200 OK\r\n");
+    socket_write($socket, "Content-Length: ".strlen($buffer)."\r\n");
+    socket_write($socket, "Content-Type: application/json\r\n");
+    socket_write($socket, "\r\n");
+    socket_write($socket, $buffer, strlen($buffer));
+    socket_close($socket);
+}
+$server->close();

@@ -1,0 +1,19 @@
+<?php return array (
+  'processors' => 4,
+  'processor_load' => 13.099999999999994,
+  'cpu' => 9,
+  'memory' => 
+  array (
+    'total' => '8052560',
+    'free' => '496472',
+    'busy' => 7556088,
+  ),
+  'swap' => 
+  array (
+    'total' => '8388604',
+    'free' => '7921784',
+    'busy' => 466820,
+  ),
+  'tasks' => 293,
+  'uptime' => 82026,
+);

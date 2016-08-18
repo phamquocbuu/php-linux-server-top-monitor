@@ -1,0 +1,10 @@
+{
+    "name": "wapmorgan/serverstat",
+    "description": "Monitor machine resources using own Web server. It starts a Web server that responds to requests to retrieve the information on the server machine resource usage like CPU load, swap space usage, RAM usage, etc..",
+    "license": "BSD-3-Clause",
+    "autoload": {
+        "psr-4": {
+            "wapmorgan\\ServerStat\\": "src/"
+        }
+    }
+}

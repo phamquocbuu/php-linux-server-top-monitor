@@ -1,0 +1,26 @@
+#!/usr/bin/php
+<?php
+use wapmorgan\ServerStat\ConfigurationReader;
+use wapmorgan\ServerStat\InformationCollector;
+use wapmorgan\ServerStat\Storage;
+
+require dirname(dirname(__FILE__)).'/vendor/autoload.php';
+$config_reader = new ConfigurationReader();
+$configuration = $config_reader->config;
+$_ENV['typeperfCounter'] = $configuration['typeperf'];
+switch ($configuration['storage']) {
+    default:
+    case 'file':
+        $storage = new Storage('file');
+    break;
+}
+
+$collector = new InformationCollector();
+
+while (true) {
+    $st = microtime(true);
+    $information = $collector->collect();
+    $storage->save($information);
+    echo 'time: '.(microtime(true) - $st).PHP_EOL;
+    sleep($configuration['period']);
+}
