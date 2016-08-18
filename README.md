@@ -1,3 +1,5 @@
+Monitor your server CPU and RAM usage with PHP
+
 # ServerStat
 ServerStat is a server monitoring software that tracks cpu, mem and swap.
 
